@@ -1,10 +1,10 @@
 "use client";
 
-import { SearchBar } from "./components/search/search-bar";
+import { SearchBar } from "@/app/components/search/search-bar";
 import { motion } from "framer-motion";
 import { InfoWidget } from "@/components/widgets/info-widget";
 
-export default function Page() {
+export default function NewChatPage() {
   return (
     <main className="flex-1 flex items-center justify-center p-8">
       <motion.div
