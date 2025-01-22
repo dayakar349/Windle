@@ -9,7 +9,7 @@ export default function Page() {
   return (
     <main className="flex-1 relative p-8">
       <div className="absolute top-8 right-8 z-10">
-        <ProfileMenu isSignedIn={false} />
+        <ProfileMenu />
       </div>
 
       <div className="flex items-center justify-center h-full">

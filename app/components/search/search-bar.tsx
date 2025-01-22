@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { chatApi } from "@/app/services/api";
 
 export function SearchBar() {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const suggestions = [
     "What is artificial intelligence?",
@@ -18,21 +20,23 @@ export function SearchBar() {
     "Explain quantum computing",
   ];
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (query.trim()) {
-      // In a real app, you'd generate a unique ID from the backend
-      const chatId = Date.now();
-      // Add to recent chats (you'd typically do this via an API)
-      const newChat = {
-        id: chatId,
-        title: query.length > 30 ? `${query.substring(0, 30)}...` : query,
-        date: "Just now",
-        href: `/chat/${chatId}`,
-      };
-
-      // Navigate to the new chat
-      router.push(`/chat/${chatId}?q=${encodeURIComponent(query)}`);
+      setIsLoading(true);
+      try {
+        const { response } = await chatApi.sendMessage(query);
+        const chatId = Date.now();
+        router.push(
+          `/chat/${chatId}?q=${encodeURIComponent(
+            query
+          )}&response=${encodeURIComponent(response)}`
+        );
+      } catch (error) {
+        console.error("Failed to get response:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
